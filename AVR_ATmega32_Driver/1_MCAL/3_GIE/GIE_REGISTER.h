@@ -3,8 +3,8 @@
 /************		Author: A. S. Eldesouky			************/
 /************		Layer: MCAL						************/
 /************		SWC: GIE						************/
-/************		Date: 20-9-2020					************/
-/************		Version: 1.00					************/
+/************		Date: 25-10-2020				************/
+/************		Version: 2.00					************/
 /***************************************************************/
 /***************************************************************/
 
@@ -12,7 +12,7 @@
 #ifndef GIE_REGISTER_H_
 #define GIE_REGISTER_H_
 
-	#define SREG			*((volatile uint8*) 0X5F)	/* Status Regiter */
+	#define SREG			*((volatile uint8*) 0X5F)	/* Status Register */
 	#define SREG_I			7							/* Global Interrupt Enable Bit */
 
-#endif
+#endif /* GIE_REGISTER_H_ */

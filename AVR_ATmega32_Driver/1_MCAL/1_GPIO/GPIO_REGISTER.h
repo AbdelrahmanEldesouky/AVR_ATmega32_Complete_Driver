@@ -9,8 +9,8 @@
 /***************************************************************/
 
 /*File Gard*/
-#ifndef DIO_REGISTER_H_
-#define DIO_REGISTER_H_
+#ifndef GPIO_REGISTER_H_
+#define GPIO_REGISTER_H_
 	
 	#define PORTA		*((volatile uint8 *) 0X3B)		/* Port A Data Register */
 	#define DDRA		*((volatile uint8 *) 0X3A)		/* Port A Data Direction Register */
@@ -28,4 +28,4 @@
 	#define DDRD		*((volatile uint8 *) 0X31)      /* Port D Data Direction Register */
 	#define PIND		*((volatile uint8 *) 0X30)      /* Port D Input Pins Address */
 	
-#endif
+#endif /* GPIO_REGISTER_H_ */

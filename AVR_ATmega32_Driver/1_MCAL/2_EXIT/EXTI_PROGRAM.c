@@ -8,18 +8,24 @@
 /***************************************************************/
 /***************************************************************/
 
+#include "../../4_LIBRARY/STD_TYPE.h"
+#include "../../4_LIBRARY/BIT_MATH.h"
 
-#include "../2_EXIT/EXTI_CONFIG.h"
-#include "../2_EXIT/EXTI_INTERFACE.h"
-#include "../2_EXIT/EXTI_PRIVATE.h"
-#include "../2_EXIT/EXTI_REGISTER.h"
-#include "STD_TYPE.h"
-#include "BIT_MATH.h"
+#include "EXTI_CONFIG.h"
+#include "EXTI_INTERFACE.h"
+#include "EXTI_PRIVATE.h"
+#include "EXTI_REGISTER.h"
 
 
-/* Define Array of Global Pointers to Function to carry ISRs Applications Addresses */
-static void (*EXTI_pvINT0CallBackFunc[3]) (void) = {NULL} ;
+/* Array of Global Pointers to Function to carry ISRs Applications Addresses */
+static void (*EXTI_pvINTCallBackFunc[3]) (void) = {NULL} ;
 
+/*
+ * @breif:	EXTI_VoidINT0Init() is a function that used to initialize External Interrupt 0
+ * @para:	void
+ * @return: void
+ * @note:	you must edit your require configuration from CONFIG.h before call it
+ */
 void EXTI_VoidINT0Init (void)
 {
 	/* Set INT0 Sense Control */
@@ -42,7 +48,7 @@ void EXTI_VoidINT0Init (void)
 	#else
 		#error "Wrong EXTI_INT0_SENSE Config"
 
-	#endif
+	#endif /* EXTI_INT0_SENSE */
 
 	#if EXTI_INT0_INITIAL_STATE == DISABLE
 			CLR_BIT(GICR , GICR_INT0) ;
@@ -53,9 +59,15 @@ void EXTI_VoidINT0Init (void)
 	#else
 		#error "Wrong EXTI_INT0_INITIAL_STATE Config"
 
-	#endif
+	#endif /* EXTI_INT0_INITIAL_STATE */
 }
 
+/*
+ * @breif:	EXTI_VoidINT1Init() is a function that used to initialize External Interrupt 1
+ * @para:	void
+ * @return: void
+ * @note:	you must edit your require configuration from CONFIG.h before call it
+ */
 void EXTI_VoidINT1Init (void)
 {
 	/* Set INT1 Sense Control */
@@ -78,7 +90,7 @@ void EXTI_VoidINT1Init (void)
 	#else
 		#error "Wrong EXTI_INT1_SENSE Config"
 
-	#endif
+	#endif /* EXTI_INT1_SENSE */
 
 	#if EXTI_INT1_INITIAL_STATE == DISABLE
 			CLR_BIT(GICR , GICR_INT0) ;
@@ -89,8 +101,15 @@ void EXTI_VoidINT1Init (void)
 	#else
 		#error "Wrong EXTI_INT1_INITIAL_STATE Config"
 
-	#endif
+	#endif /* EXTI_INT1_INITIAL_STATE */
 }
+
+/*
+ * @breif:	EXTI_VoidINT2Init() is a function that used to initialize External Interrupt 2
+ * @para:	void
+ * @return: void
+ * @note:	you must edit your require configuration from CONFIG.h before call it
+ */
 void EXTI_VoidINT2Init (void)
 {
 	/* Set INT2 Sense Control */
@@ -103,7 +122,7 @@ void EXTI_VoidINT2Init (void)
 	#else
 		#error "Wrong EXTI_INT2_SENSE Config"
 
-	#endif
+	#endif /* EXTI_INT2_SENSE */
 
 	#if EXTI_INT2_INITIAL_STATE == DISABLE
 			CLR_BIT(GICR , GICR_INT0) ;
@@ -114,9 +133,15 @@ void EXTI_VoidINT2Init (void)
 	#else
 		#error "Wrong EXTI_INT2_INITIAL_STATE Config"
 
-	#endif
+	#endif /* EXTI_INT2_INITIAL_STATE */
 }
 
+/*
+ * @breif:	EXTI_uint8EnableInterrupt() is a function that used to enable PIE
+ * @para:	Copy_uint8INT_Number -> INT Number [INT0 - INT1 - INT2]
+ * @return: Copy_uint8ErrorState -> Error Type -> [OK - NOK]
+ * @example: To enable PIE of INT0 --> EXTI_uint8EnableInterrupt(INT0);
+ */
 uint8 EXTI_uint8SetSenseCotrol (uint8 Copy_uint8INT_Number , uint8 Copy_uint8Sense)
 {
 	uint8 Local_uint8ErrorState = OK ;
@@ -159,13 +184,61 @@ uint8 EXTI_uint8SetSenseCotrol (uint8 Copy_uint8INT_Number , uint8 Copy_uint8Sen
 	return Local_uint8ErrorState ;
 }
 
+/*
+ * @breif:	EXTI_uint8EnableInterrupt() is a function that used to enable PIE
+ * @para:	Copy_uint8INT_Number -> INT Number [EXTI_INT0 - EXTI_INT1 - EXTI_INT2]
+ * @return: Copy_uint8ErrorState -> Error Type -> [OK - NOK]
+ * @example: To enable PIE of INT0 --> EXTI_uint8EnableInterrupt(INT0);
+ */
+uint8 EXTI_uint8EnableInterrupt (uint8 Copy_uint8INT_Number)
+{
+	uint8 Local_uint8ErrorState = OK ;
+
+	switch (Copy_uint8INT_Number)
+	{
+	case EXTI_INT0 : SET_BIT(GICR , GICR_INT0) ; break ;
+	case EXTI_INT1 : SET_BIT(GICR , GICR_INT1) ; break ;
+	case EXTI_INT2 : SET_BIT(GICR , GICR_INT2) ; break ;
+	default: Local_uint8ErrorState = NOK ;
+	}
+
+	return Local_uint8ErrorState ;
+}
+
+/*
+ * @breif:	EXTI_uint8EnableInterrupt() is a function that used to disable PIE
+ * @para:	Copy_uint8INT_Number -> INT Number [INT0 - INT1 - INT2]
+ * @return: Copy_uint8ErrorState -> Error Type -> [OK - NOK]
+ * @example: To disable PIE of INT2 --> EXTI_uint8DisableInterrupt(INT2);
+ */
+uint8 EXTI_uint8DisableInterrupt (uint8 Copy_uint8INT_Number)
+{
+	uint8 Local_uint8ErrorState = OK ;
+
+	switch (Copy_uint8INT_Number)
+	{
+	case EXTI_INT0 : CLR_BIT(GICR , GICR_INT0) ; break ;
+	case EXTI_INT1 : CLR_BIT(GICR , GICR_INT1) ; break ;
+	case EXTI_INT2 : CLR_BIT(GICR , GICR_INT2) ; break ;
+	default: Local_uint8ErrorState = NOK ;
+	}
+
+	return Local_uint8ErrorState ;
+}
+
+/*
+ * @breif:	EXTI_uint8INTSetCallBack() is a function that used to call back the ISR function when the EXTI happened
+ * @para:	Copy_pvoidCallBackFunc() -> call back function -> take address of the ISR function
+ * @para:	Copy_uint8INT_Number -> INT Number [INT0 - INT1 - INT2]
+ * @return: Copy_uint8ErrorState -> Error Type -> [OK - NOK - NULL_POINTER]
+ */
 uint8 EXTI_uint8INTSetCallBack (void (*Copy_pvCallBackFunc)(void) , uint8 Copy_uint8INT_Number)
 {
 	uint8 Local_uint8ErrorState = OK ;
 
 	if (Copy_pvCallBackFunc != NULL)
 	{
-		EXTI_pvINT0CallBackFunc[Copy_uint8INT_Number] = Copy_pvCallBackFunc ;
+		EXTI_pvINTCallBackFunc[Copy_uint8INT_Number] = Copy_pvCallBackFunc ;
 	}
 	else
 	{
@@ -178,26 +251,26 @@ uint8 EXTI_uint8INTSetCallBack (void (*Copy_pvCallBackFunc)(void) , uint8 Copy_u
 void __vector_1 (void) 		__attribute__((signal)) ;
 void __vector_1 (void)
 {
-	if (EXTI_pvINT0CallBackFunc[EXTI_INT0] != NULL)
+	if (EXTI_pvINTCallBackFunc[EXTI_INT0] != NULL)
 	{
-		EXTI_pvINT0CallBackFunc[EXTI_INT0]() ;
+		EXTI_pvINTCallBackFunc[EXTI_INT0]() ;
 	}
 }
 /* ISR for INT1 */
 void __vector_2 (void) 		__attribute__((signal)) ;
 void __vector_2 (void)
 {
-	if (EXTI_pvINT0CallBackFunc[EXTI_INT1] != NULL)
+	if (EXTI_pvINTCallBackFunc[EXTI_INT1] != NULL)
 	{
-		EXTI_pvINT0CallBackFunc[EXTI_INT1] () ;
+		EXTI_pvINTCallBackFunc[EXTI_INT1] () ;
 	}
 }
 /* ISR for INT2 */
 void __vector_3 (void) 		__attribute__((signal)) ;
 void __vector_3 (void)
 {
-	if (EXTI_pvINT0CallBackFunc[EXTI_INT2] != NULL)
+	if (EXTI_pvINTCallBackFunc[EXTI_INT2] != NULL)
 	{
-		EXTI_pvINT0CallBackFunc[EXTI_INT2] () ;
+		EXTI_pvINTCallBackFunc[EXTI_INT2] () ;
 	}
 }

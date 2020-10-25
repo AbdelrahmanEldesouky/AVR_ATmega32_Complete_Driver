@@ -3,8 +3,8 @@
 /************		Author: A. S. Eldesouky			************/
 /************		Layer: MCAL						************/
 /************		SWC: EXTI						************/
-/************		Date: 20-9-2020					************/
-/************		Version: 1.00					************/
+/************		Date: 25-10-2020				************/
+/************		Version: 2.00					************/
 /***************************************************************/
 /***************************************************************/
 
@@ -26,4 +26,11 @@
 	#define GICR_INT0		6							/* INT0 PIE */
 	#define GICR_INT2		5							/* INT2 PIE */
 
-#endif
+	#define GIFR			*((volatile uint8*) 0X5A)	/* General Interrupt Flag Register */
+	#define GIFR_INT1		7							/* INT1 PIF */
+	#define GIFR_INT0		6							/* INT0 PIF */
+	#define GIFR_INT2		5							/* INT2 PIF */
+
+
+
+#endif /* EXTI_REGISTER_H_ */
