@@ -137,10 +137,11 @@ void EXTI_VoidINT2Init (void)
 }
 
 /*
- * @breif:	EXTI_uint8EnableInterrupt() is a function that used to enable PIE
+ * @breif:	EXTI_uint8SetSenseCotrol() is a function that used to Control the sense
  * @para:	Copy_uint8INT_Number -> INT Number [INT0 - INT1 - INT2]
+ * @para:	Copy_uint8Sense -> Sense state [LOW_LEVEL - ON_CHANGE - FALLING_EDGE - RISING_EDGE]
  * @return: Copy_uint8ErrorState -> Error Type -> [OK - NOK]
- * @example: To enable PIE of INT0 --> EXTI_uint8EnableInterrupt(INT0);
+ * @example: To make the sense of the INT0 is FALLING_EDGE --> EXTI_uint8SetSenseCotrol(INT0, FALLING_EDGE);
  */
 uint8 EXTI_uint8SetSenseCotrol (uint8 Copy_uint8INT_Number , uint8 Copy_uint8Sense)
 {
@@ -185,7 +186,7 @@ uint8 EXTI_uint8SetSenseCotrol (uint8 Copy_uint8INT_Number , uint8 Copy_uint8Sen
 }
 
 /*
- * @breif:	EXTI_uint8EnableInterrupt() is a function that used to enable PIE
+ * @breif:	EXTI_uint8EnableInterrupt() is a function that used to enable EXTI PIE
  * @para:	Copy_uint8INT_Number -> INT Number [EXTI_INT0 - EXTI_INT1 - EXTI_INT2]
  * @return: Copy_uint8ErrorState -> Error Type -> [OK - NOK]
  * @example: To enable PIE of INT0 --> EXTI_uint8EnableInterrupt(INT0);
@@ -206,7 +207,7 @@ uint8 EXTI_uint8EnableInterrupt (uint8 Copy_uint8INT_Number)
 }
 
 /*
- * @breif:	EXTI_uint8EnableInterrupt() is a function that used to disable PIE
+ * @breif:	EXTI_uint8EnableInterrupt() is a function that used to disable EXTI PIE
  * @para:	Copy_uint8INT_Number -> INT Number [INT0 - INT1 - INT2]
  * @return: Copy_uint8ErrorState -> Error Type -> [OK - NOK]
  * @example: To disable PIE of INT2 --> EXTI_uint8DisableInterrupt(INT2);
