@@ -38,6 +38,12 @@ static uint8 ADC_uint8Index ;
 /*Global flag for the ADC Busy State*/
 static uint8 ADC_uint8State= ACTIVE ;
 
+/*
+ * @breif:	ADC_VoidInit() is a function that used to initialize ADC Peripheral
+ * @para:	void
+ * @return: void
+ * @note:	you must edit your require configuration from CONFIG.h before call it
+ */
 void ADC_VoidInit(void)
 {
 	/*Select the voltage reference*/
@@ -56,7 +62,7 @@ void ADC_VoidInit(void)
 	#else
 		#error "Wrong ADC_VOLTAGE_REFERENCE config"
 
-	#endif
+	#endif /* ADC_VOLTAGE_REFERENCE */
 
 	/*Set Left Adjust Result*/
 	#if ADC_RESOLUTION == ADC_RESOLUTION_10_BIT
@@ -68,7 +74,7 @@ void ADC_VoidInit(void)
 	#else
 		#error "Wrong ADC_RESOLUTION_8_BIT config"
 
-	#endif
+	#endif /* ADC_RESOLUTION */
 
 	/*Set Prescaler Value*/
 	ADSAR &= ADC_PRESCALER_MASK ;
@@ -81,30 +87,89 @@ void ADC_VoidInit(void)
 		SET_BIT(ADSAR , ADSAR_ADEN) ;
 	#else
 	#error "Wrong ADC_PERIPHERAL_CONTROL config"
-	#endif
+	#endif /* ADC_PERIPHERAL_CONTROL */
+
+	/*Enable ADC Interrupt*/
+	#if ADC_INTERRUPT_CONTROL == DISABLE
+		CLR_BIT(ADSAR , ADSAR_ADIE) ;
+	#elif ADC_INTERRUPT_CONTROL == ENABLE
+		SET_BIT(ADSAR , ADSAR_ADIE) ;
+	#else
+	#error "Wrong ADC_INTERRUPT_CONTROL config"
+	#endif /* ADC_INTERRUPT_CONTROL */
 
 }
 
+/*
+ * @breif:	ADC_VoidEnable() is a function that used to enable ADC
+ * @para:	void
+ * @return: void
+ * @example: To enable ADC ->  ADC_VoidEnable();
+ */
 void ADC_VoidEnable (void)
 {
 	SET_BIT(ADSAR , ADSAR_ADEN) ;
 }
 
+/*
+ * @breif:	ADC_VoidDisable() is a function that used to disable ADC
+ * @para:	void
+ * @return: void
+ * @example: To disable ADC ->  ADC_VoidDisable();
+ */
 void ADC_VoidDisable (void)
 {
 	CLR_BIT(ADSAR , ADSAR_ADEN) ;
 }
 
+/*
+ * @breif:	ADC_VoidInterruptEnable() is a function that used to enable ADC PIE
+ * @para:	void
+ * @return: void
+ * @example: To enable ADC PIE ->  ADC_VoidInterruptEnable();
+ */
 void ADC_VoidInterruptEnable (void)
 {
 	SET_BIT(ADSAR , ADSAR_ADIE) ;
 }
 
+/*
+ * @breif:	ADC_VoidInterruptEnable() is a function that used to disable ADC PIE
+ * @para:	void
+ * @return: void
+ * @example: To disable ADC PIE ->  ADC_VoidInterruptDisable();
+ */
 void ADC_VoidInterruptDisable (void)
 {
 	CLR_BIT(ADSAR , ADSAR_ADIE) ;
 }
 
+/*
+ * @breif:	ADC_uint8SetPrescaler() is a function that used to set the ADC division factor
+ * @para:	Copy_uint8Prescaler -> ADC_DIVISION_FACTOR_number
+ * @return: Copy_uint8ErrorState -> Error Type -> [OK - NOK]
+ * @example: To set prescaler for ADC divided by 8 --> ADC_uint8SetPrescaler(ADC_DIVISION_FACTOR_8);
+ */
+uint8 ADC_uint8SetPrescaler (uint8 Copy_uint8Prescaler)
+{
+	uint8 Local_uint8ErrorState = OK ;
+
+	if (Copy_uint8Prescaler < 8)
+	{
+		/*Set Prescaler Value*/
+		ADSAR &= ADC_PRESCALER_MASK ;
+		ADSAR |= Copy_uint8Prescaler ;
+	}
+
+	return Local_uint8ErrorState ;
+}
+
+/*
+ * @breif:	ADC_uint8StartSingleConversionSynch() is a function that used to start single conversion synchronous
+ * @para:	Copy_uint8Channel -> ADC_CHANNEL_...n
+ * @para:	* Copy_puint16Result -> pointer to hold the conversion result
+ * @return: Copy_uint8ErrorState -> Error Type -> [OK - NOK - NULL_POINTER - TIMEOUT_STATE]
+ */
 uint8 ADC_uint8StartSingleConversionSynch (uint8 Copy_uint8Channel , uint16 * Copy_puint16Result)
 {
 	uint8 Local_uint8ErrorState = OK ;
@@ -166,6 +231,13 @@ uint8 ADC_uint8StartSingleConversionSynch (uint8 Copy_uint8Channel , uint16 * Co
 	return Local_uint8ErrorState ;
 }
 
+/*
+ * @breif:	ADC_uint8StartSingleConversionAsynch() is a function that used to start single conversion asynchronous
+ * @para:	Copy_uint8Channel -> ADC_CHANNEL_...n
+ * @para:	Copy_puint16Result -> pointer to hold the conversion result
+ * @para:	Copy_pvNotificationFunc -> notification function execute in ISR
+ * @return: Copy_uint8ErrorState -> Error Type -> [OK - NOK - NULL_POINTER - TIMEOUT_STATE]
+ */
 uint8 ADC_uint8StartSingleConversionAsynch (uint8 Copy_uint8Channel , uint16 * Copy_puint16Result , void (*Copy_pvNotificationFunc)(void))
 {
 	uint8 Local_uint8ErrorState = OK ;
@@ -209,6 +281,11 @@ uint8 ADC_uint8StartSingleConversionAsynch (uint8 Copy_uint8Channel , uint16 * C
 	return Local_uint8ErrorState ;
 }
 
+/*
+ * @breif:	ADC_uint8StartChainConversionAsynch() is a function that used to start chain conversion asynchronous
+ * @para:	ADC_Chain -> {&ADC_Channel , ChainSize , &ADC_Result , &NotificationFunc}
+ * @return: Copy_uint8ErrorState -> Error Type -> [OK - NOK - NULL_POINTER - TIMEOUT_STATE]
+ */
 uint8 ADC_uint8StartChainConversionAsynch (ADC_Chain * Copy_Chain)
 {
 	uint8 Local_uint8ErrorState = OK ;
@@ -255,6 +332,7 @@ uint8 ADC_uint8StartChainConversionAsynch (ADC_Chain * Copy_Chain)
 	return Local_uint8ErrorState ;
 }
 
+/* ISR for ADC conversion complete */
 void __vector_16 (void)  __attribute__((signal)) ;
 void __vector_16 (void)
 {
