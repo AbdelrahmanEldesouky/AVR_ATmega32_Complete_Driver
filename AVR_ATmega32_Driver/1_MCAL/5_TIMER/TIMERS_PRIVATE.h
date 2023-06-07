@@ -15,9 +15,6 @@
 	#define DISABLE						                    0
 	#define ENABLE						                    1
 
-	#define FALLING_EDGE				                    0
-	#define RISING_EDGE					                    1
-
 	#define TIMER_NO_CLOCK_SOURCE	 	                    0
 	#define TIMER_NO_PRESCALER_FACTOR 	                    1
 	#define TIMER_DIVISION_FACTOR_8	 	                    2

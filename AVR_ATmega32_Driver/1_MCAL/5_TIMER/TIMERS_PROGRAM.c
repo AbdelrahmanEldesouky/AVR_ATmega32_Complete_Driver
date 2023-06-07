@@ -567,6 +567,49 @@ void TIMER2_VoidInit(void)
 	TCCR2 |= TIMER2_PRESCALER ;
 }
 
+void TIMER1_VoidICUInit(void) 
+{
+	/* Set Initial Trigger */
+	#if TIMER1_ICR_EDGE == RISING_EDGE
+		SET_BIT(TCCR1B , TCCR1B_ICES1) ;
+	#elif TIMER1_ICR_EDGE == FALLING_EDGE
+		CLR_BIT(TCCR1B , TCCR1B_ICES1) ;
+	#else 
+		#error "Wrong TIMER1_ICR_EDGE Config"
+	
+	/* Enable ICU Interrupt */ 
+	SET_BIT(TIMSK , TIMSK_TICIE1) ;
+}
+uint8 TIMER1_uint8SetICUTrigger(uint8 copy_uint8Trigger) 
+{
+	uint8 Local_uint8ErrorState = OK ;
+	if (copy_uint8Trigger == RISING_EDGE)
+	{
+		/* Set ICU Trigger as RISING_EDGE*/
+		SET_BIT(TCCR1B , TCCR1B_ICES1) ;
+	}
+	else if (copy_uint8Trigger == FALLING_EDGE)
+	{
+		/* Set ICU Trigger as FALLING_EDGE*/
+		CLR_BIT(TCCR1B , TCCR1B_ICES1) ;
+	}
+	else
+	{
+		Local_uint8ErrorState = NOK ; 
+	}
+	return Local_uint8ErrorState ;  
+}
+uint16 TIMER1_uint16GetICUValue (void)
+{
+	/* Read ICU Value */ 
+	return ICR1 ; 
+}
+void TIMER1_VoidICUInterruptDisable(void) 
+{
+	/* Disable ICU Interrupt */ 
+	CLR_BIT(TIMSK , TIMSK_TICIE1) ;
+}
+
 uint8 TIMERS_uint8SetCallBackFunc(void (*Copy_pvCallBackFunc)(void) , uint8 Copy_uint8VectorID)
 {
 	uint8 Local_uint8ErrorState = OK ;

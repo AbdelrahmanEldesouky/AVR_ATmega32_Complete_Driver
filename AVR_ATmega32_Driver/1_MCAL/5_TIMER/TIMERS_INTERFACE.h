@@ -22,6 +22,9 @@
 
 	#define TIMER2_OVF_VECTOR_ID		5
 	#define TIMER2_CTC_VECTOR_ID		4
+	
+	#define FALLING_EDGE				                    0
+	#define RISING_EDGE					                    1
 
 	uint8 TIMERS_uint8SetCallBackFunc(void (*Copy_pvCallBackFunc)(void) , uint8 Copy_uint8VectorID) ;
 
@@ -36,6 +39,11 @@
 	void TIMER1_VoidSetCTCB (uint16 Copy_uint16CTCB) ;
 	void TIMER1_VoidSetICR1 (uint16 Copy_uint16ICR1) ;
 	uint16 TIMER1_uint16GetTimerValue (void) ;
+	void TIMER1_VoidICUInit(void) ; 
+	uint8 TIMER1_uint8SetICUTrigger(uint8 copy_uint8Trigger) ; 
+	uint16 TIMER1_uint16GetICUValue (void) ;
+	void TIMER1_VoidICUInterruptDisable(void) ; 
+	
 
 	void TIMER2_VoidInit(void) ;
 	void TIMER2_VoidSetPreload (uint8 Copy_uint8Preload) ;
